@@ -46,8 +46,6 @@ this app built with React Native and the database use MySql. Astro Library helps
 9. Lets find and borrow your favorite books !!
 
 
-
-## Setting Google Maps 
  
 ## Screenshots
 <div align="center">
