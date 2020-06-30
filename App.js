@@ -79,9 +79,9 @@ const App = () => {
               headerShown: false,
             }}
           />
-          <Screen name="ManageAuthor" component={ManageAuthor} />
+          <Screen name="Manage Author" component={ManageAuthor} />
 
-          <Screen name="ManageGenre" component={ManageGenre} />
+          <Screen name="Manage Genre" component={ManageGenre} />
           <Screen
             name="Author"
             component={Author}

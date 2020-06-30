@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
-// import { getDetailBook, getAllBooks } from '../utils/http'
 import CardDetailBook from '../components/CardDetailBook';
 import AsyncStorage from '@react-native-community/async-storage';
 import EditBookModal from '../components/EditBookModal';
-// import ImagePicker from 'react-native-image-picker';
 import {
-  //   AppRegistry,
-  //   Text,
   View,
   StyleSheet,
   Platform,
@@ -15,18 +11,6 @@ import {
   // Alert,
   BackHandler,
 } from 'react-native';
-// import {
-//   // Container,
-//   // Content,
-//   //   Card,
-//   //   CardItem,
-//   //   Thumbnail,
-//   //   Text,
-//     Button,
-//     Icon,
-//   //   Left,
-//   // Spinner,
-// } from 'native-base';
 
 import {connect} from 'react-redux';
 import {getAuthorActionCreator} from '../redux/actions/AuthorAction';
@@ -37,12 +21,8 @@ import {
   getBookByGenreOnIdActionCreator,
 } from '../redux/actions/BookAction';
 
-// import {
-//   getUserBorrowActionCreator,
-//   getAllBorrowActionCreator,
-// } from '../redux/actions/BorrowAction';
-const HEADER_MIN_HEIGHT = 50;
-const HEADER_MAX_HEIGHT = 200;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_MAX_HEIGHT = 220;
 class DetailBook extends Component {
   state = {
     data: [],
@@ -79,15 +59,7 @@ class DetailBook extends Component {
       }
     } catch (e) {}
   };
-  refresh = async () => {
-    // await this.props.getAllBooksAction(this.props.route.params.token, {
-    //   page: page,
-    //   limit: limit,
-    //   orderBy: orderBy,
-    //   sortBy: sortBy,
-    //   title: title,
-    // });
-  };
+  refresh = async () => {};
 
   componentDidMount = async () => {
     //  this.getData()
@@ -123,7 +95,6 @@ class DetailBook extends Component {
 
   render() {
     // eslint-disable-next-line radix
-
     let id = parseInt(this.props.route.params.id);
     const dataById = this.props.dataBook.filter(dataBook => dataBook.id === id);
 
@@ -177,13 +148,6 @@ class DetailBook extends Component {
 
     return (
       <View style={styles.container}>
-        {/* <Animated.View
-          style={[
-            styles.animatedHeaderContainer,
-            {height: headerHeight, backgroundColor: headerBackgroundColor},
-          ]}>
-          <Text style={styles.headerText}>Animated Header</Text>
-        </Animated.View> */}
         <ScrollView
           contentContainerStyle={{paddingTop: HEADER_MAX_HEIGHT}}
           scrollEventThrottle={16}
@@ -203,39 +167,9 @@ class DetailBook extends Component {
           <></>
         )}
       </View>
-      //   <>
-      //     {this.props.isFulfilled === true && data ? (
-      //       //  <div className="container" style={{  backgroundImage:`url('http://localhost:8080/public/image/${data.image}')`,backgroundSize: "100% 40%",borderStyle:"ridge", borderRadius: "25px",maxWidth: "600px",minWidth: "475px" , backgroundRepeat: "no-repeat" }}>
-      //       //       <EditBookModal id={this.props.match.params.id} refresh={this.componentDidMount} data={data}/>
-
-      //       <>
-      //         <Content style={styles.backgroundColor}>{renderDataDetail}</Content>
-      //         {this.state.role === '1' || this.state.role === 1 ? (
-      //           <EditBookModal
-      //             id={this.props.route.params.id}
-      //             token={this.props.route.params.token}
-      //             refresh={this.componentDidMount}
-      //             data={data}
-      //           />
-      //         ) : (
-      //           <></>
-      //         )}
-      //       </>
-      //     ) : (
-      //       //   </div>
-
-      //       <Container style={styles.container}>
-      //         <Spinner color="darkcyan" />
-      //       </Container>
-      //     )}
-      //   </>
     );
   }
 }
-// const styles = StyleSheet.create({
-//   backgroundColor: {backgroundColor: 'black'},
-//   container: {justifyContent: 'center', alignItems: 'center'},
-// });
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -10,12 +10,7 @@ import {
   // ScrollView,
 } from 'react-native';
 import {
-  // Container,
-  // Header,
-  // Content,
   Card,
-  // CardItem,
-  // Thumbnail,
   Text,
   Button,
   Icon,
@@ -106,11 +101,6 @@ function CardDetailBook({
         <ImageBackground
           source={{uri: `${URL_BASE}/public/image/` + data.image}}
           style={styles.imageBackground2}>
-          {/* <ScrollView style={styles.view}> */}
-          {/* <Card transparent style={styles.card}> */}
-          {/* <ImageBackground
-          source={{uri: `${URL_BASE}/public/image/` + data.image}}
-          style={styles.imageBackground}> */}
           <Button
             dark
             bordered
@@ -256,12 +246,6 @@ function CardDetailBook({
           <></>
         )}
       </Card>
-
-      {/* <Button dark transparent  iconLeft style={{marginLeft:10,width:"10%"}} onPress={console.log(role)}>
- <Icon style={{color:"white"}} name="add" />
-</Button> */}
-
-      {/* </ScrollView> */}
     </>
   );
 }

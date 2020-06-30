@@ -118,7 +118,7 @@ class Author extends Component {
               containerStyle={{}}
               style={styles.fabBackground}
               position="bottomLeft"
-              onPress={() => this.props.navigation.navigate('ManageAuthor')}>
+              onPress={() => this.props.navigation.navigate('Manage Author')}>
               <Icon name="add" />
             </Fab>
 

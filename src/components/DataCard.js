@@ -193,7 +193,7 @@ function DataCard({
                     <Button
                       transparent
                       onPress={() => {
-                        props.navigation.navigate('ManageAuthor', {
+                        props.navigation.navigate('Manage Author', {
                           id: data.id,
                         });
                       }}>
@@ -203,7 +203,7 @@ function DataCard({
                     <Button
                       transparent
                       onPress={() => {
-                        props.navigation.navigate('ManageGenre', {
+                        props.navigation.navigate('Manage Genre', {
                           id: data.id,
                         });
                       }}>

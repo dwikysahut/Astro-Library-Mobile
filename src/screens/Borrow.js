@@ -105,17 +105,6 @@ class Borrow extends Component {
         style={styles.imageBackground}>
         <CustomHeader name="Borrow & History" props={this.props} />
         <Content>{renderData}</Content>
-
-        {/* {this.props.isLoading===false?
-          <Content>
-          {renderData}
-
-          </Content>
-              :
-           <Container style={{justifyContent:"center",alignItems:"center"}}  >
-           <Spinner color='darkcyan' />
-           </Container>
-        } */}
       </ImageBackground>
     );
   }

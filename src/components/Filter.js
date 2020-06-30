@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   picker: {width: 100, color: 'white'},
   whiteColor: {color: 'white'},
   buttonSortby: {
-    width: 60,
     height: 30,
     marginLeft: 40,
     marginRight: 40,

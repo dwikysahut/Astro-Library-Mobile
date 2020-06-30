@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: '32%',
+    width: '35%',
     height: 60,
-    marginTop: '15%',
-    marginLeft: '65%',
+    marginTop: '20%',
+    marginLeft: '60%',
     backgroundColor: 'white',
     borderRadius: 40,
   },

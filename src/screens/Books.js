@@ -406,7 +406,7 @@ class Books extends Component {
                   style={{
                     color: 'black',
                     textAlign: 'center',
-                    marginTop: 30,
+                    marginTop: '20%',
                     fontWeight: 'bold',
                   }}>
                   {data.name}
@@ -534,14 +534,19 @@ class Books extends Component {
 }
 const styles = StyleSheet.create({
   image: {
-    height: 100,
-    width: 80,
+    height: 80,
+    width: 110,
     borderRadius: 20,
     backgroundColor: 'rgba(52, 52, 52, 0.2)',
     marginRight: 20,
     marginLeft: 15,
+    marginTop: 20,
   },
-  cardItem: {backgroundColor: 'rgba(52, 52, 52, 0.2)', borderRadius: 20},
+  cardItem: {
+    backgroundColor: 'rgba(52, 52, 52, 0.2)',
+    borderRadius: 20,
+    alignItems: 'center',
+  },
   view: {height: '22%'},
   borrowTitle: {
     backgroundColor: 'rgba(52, 52, 52, 0.2)',

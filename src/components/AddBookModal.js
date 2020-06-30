@@ -290,7 +290,7 @@ class AddBookModal extends Component {
                     bordered
                     style={styles.buttonImage}
                     onPress={this.openUpload}>
-                    <Text>Choose Image</Text>
+                    <Text>Choose File</Text>
                   </Button>
 
                   <Item>

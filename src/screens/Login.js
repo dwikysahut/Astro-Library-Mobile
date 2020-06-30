@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Text, View, Item, Input} from 'native-base';
-import {Alert, ImageBackground} from 'react-native';
+import {Button, Text, View, Item, Input, Spinner} from 'native-base';
+import {ImageBackground, ToastAndroid} from 'react-native';
 // import {Link} from '@react-navigation/native';
 // import { ImageBackground} from "react-native";
 // import { StyleSheet } from 'react-native';
@@ -23,6 +23,7 @@ class Login extends Component {
     isEmptyPassword: true,
     isMatch: false,
     isShow: false,
+    isLoading: false,
   };
 
   storeData = async (name, value) => {
@@ -61,26 +62,39 @@ class Login extends Component {
   handleShow = () => {
     this.setState({isShow: true});
   };
+  showToastMessage = text => {
+    ToastAndroid.showWithGravityAndOffset(
+      text,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50,
+    );
+  };
   login = async e => {
     // e.preventDefault()
     const {email, password} = this.state;
     if (this.state.email === '') {
-      Alert.alert('Caution', 'email Cannot Empty!!');
+      // Alert.alert('Caution', 'email Cannot Empty!!');
+      this.showToastMessage('Email Cannot Empty');
       this.setState({isEmptyEmail: true});
       return;
     }
     if (!this.state.validEmail) {
-      Alert.alert('Email Not Valid');
+      // Alert.alert('Email Not Valid');
+      this.showToastMessage('Invalid Email!!');
       this.setState({isEmptyPassword: true});
       return;
     }
     if (this.state.password === '') {
-      Alert.alert('password Cannot Empty');
+      // Alert.alert('password Cannot Empty');
+      this.showToastMessage('Password Cannot Empty');
       this.setState({isEmptyPassword: true});
       return;
     }
     if (this.state.validPassword === false) {
-      Alert.alert('password must 5-16 characters');
+      // Alert.alert('password must 5-16 characters');
+      this.showToastMessage('Password Must 5-16 characters');
     } else {
       if (this.props.isRejected === false) {
         // Alert.alert('berhasil')
@@ -90,26 +104,17 @@ class Login extends Component {
     }
 
     this.setState({isShow: true});
-    // this.setState({ isMatch: true })
-
-    // await this.props.loginUserAction({email, password});
-    // this.setState({isShow: true});
-    // await  this.storeData('role',response.data.data.role)
-    // await  this.storeData('id',response.data.data.id)
-    // await  this.storeData('id_user',response.data.data.id)
-    // await this.storeData('email',response.data.data.email)
-    // await this.storeData('refreshToken',response.data.data.refreshToken)
-    // await this.storeData('token',response.data.data.token)
-    // await this.setState({isLogin: true, show: true})
     if (this.state.validEmail && this.state.validPassword) {
       await this.props.loginUserAction({email, password});
       console.log(this.props.error);
       if (this.props.error === 204) {
         this.setState({isMatch: false});
-        Alert.alert('Ooppss..', 'Incorrect Username or Password');
+        // Alert.alert('Ooppss..', 'Incorrect Username or Password');
+        this.showToastMessage('Ooppss..Incorrect Username or Password');
 
         return false;
       }
+      this.setState({isLoading: true});
 
       this.setState({isShow: true});
       if (this.props.token) {
@@ -119,52 +124,14 @@ class Login extends Component {
         await this.storeData('email', this.props.email);
         await this.storeData('refreshToken', this.props.refreshToken);
         await this.storeData('token', this.props.token);
-        this.setState({email: '', password: ''});
 
         if (await this.getStoreData('token')) {
           // Alert.alert('Login success');
+          this.setState({email: '', password: ''});
+          this.setState({isLoading: false});
           this.props.navigation.navigate('Home');
         }
       }
-      // await loginUser({
-      //   email,
-      //   password,
-      // })
-      //   .then( async (response) => {
-      //     console.log(response.data);
-      //     if (response.data.status === 200) {
-      //       this.setState({isShow: false});
-      //     await  this.storeData('role',response.data.data.role)
-      //     await  this.storeData('id',response.data.data.id)
-      //     await  this.storeData('id_user',response.data.data.id)
-      //     await this.storeData('email',response.data.data.email)
-      //     await this.storeData('refreshToken',response.data.data.refreshToken)
-      //     await this.storeData('token',response.data.data.token)
-      //     await this.setState({isLogin: true, show: true})
-
-      //       if(await this.getStoreData('token')){
-      //         Alert.alert("Login success")
-      //         this.props.navigation.navigate('Home', {
-      //           token:   await this.getStoreData('token'),
-      //           role:   await this.getStoreData('role'),
-      //            });;
-      //       };
-
-      //     } else if (
-      //       response.status === 204
-
-      //     ) {
-      //       this.setState({isMatch: false});
-
-      //       console.log(response.statusText);
-      //       console.log('Incorrect Username or password');
-      //       Alert.alert("Incorrect Username or password");
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(this.state);
-      //     console.log(error);
-      //   });
     }
   };
   componentDidMount() {}
@@ -184,7 +151,12 @@ class Login extends Component {
         <Text style={styles.logo}>L o g i n</Text>
 
         {/* <Text style={{ padding: 10, paddingTop: 5 }}>Email Address</Text> */}
-        <View style={styles.inputView}>
+        <View
+          style={
+            !this.state.validEmail && this.state.email !== ''
+              ? styles.invalidInputView
+              : styles.inputView
+          }>
           <Item>
             <Input
               style={styles.inputText}
@@ -245,17 +217,40 @@ class Login extends Component {
                     validPassword: false,
                   });
                 }
+                if (!event.nativeEvent.text) {
+                  this.setState({
+                    password: '',
+                    isEmptyPassword: true,
+                    validPassword: false,
+                  });
+                }
+                // else {
+                //   this.setState({
+                //     password: event.nativeEvent.text,
+                //     validPassword: false,
+                //   });
+                // }
               }}
             />
           </Item>
+          {this.state.password && this.state.password.length <= 4 ? (
+            <Text note style={styles.redColor}>
+              Password must 5-16 character
+            </Text>
+          ) : (
+            <></>
+          )}
         </View>
         {/* <Button onPress={() => navigation.navigate('Home')} dark>
             <Text style={styles.textProfile}>Go To Home</Text>
           </Button> */}
-
-        <Button style={styles.loginBtn} onPress={this.login}>
-          <Text style={styles.loginText}> LOGIN </Text>
-        </Button>
+        {this.state.isLoading ? (
+          <Spinner color="white" />
+        ) : (
+          <Button style={styles.loginBtn} onPress={this.login}>
+            <Text style={styles.loginText}> LOGIN </Text>
+          </Button>
+        )}
         <Item>
           <Text style={styles.inputText}>Don't have an account yet?</Text>
           <Text

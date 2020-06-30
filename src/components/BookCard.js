@@ -3,7 +3,16 @@ import {Image, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {Card, CardItem, Text, Button, Left, Body} from 'native-base';
 import {REACT_APP_API} from 'react-native-dotenv';
-function BookCard({data, refresh, navigation, props, role, token, id_user,page}) {
+function BookCard({
+  data,
+  refresh,
+  navigation,
+  props,
+  role,
+  token,
+  id_user,
+  page,
+}) {
   // const URL_BASE = 'http://10.0.2.2:8080';
   const URL_BASE = REACT_APP_API;
   return (

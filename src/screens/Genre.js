@@ -122,7 +122,7 @@ class Genre extends Component {
               containerStyle={{}}
               style={styles.fabBackground}
               position="bottomLeft"
-              onPress={() => this.props.navigation.navigate('ManageGenre')}>
+              onPress={() => this.props.navigation.navigate('Manage Genre')}>
               <Icon name="add" />
             </Fab>
 

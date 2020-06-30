@@ -29,8 +29,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.3)',
 
     borderRadius: 25,
+    borderWidth: 1,
 
     height: 50,
+    marginBottom: 10,
+    // marginTop:60,
+    justifyContent: 'center',
+
+    padding: 20,
+  },
+
+  invalidInputView: {
+    width: '80%',
+
+    backgroundColor: 'rgba(52, 52, 52, 0.3)',
+
+    borderRadius: 25,
+    borderWidth: 1,
+
+    height: 50,
+    borderColor: 'red',
 
     marginBottom: 10,
     // marginTop:60,
@@ -69,7 +87,7 @@ const styles = StyleSheet.create({
     color: '#ffd700',
     fontWeight: 'bold',
   },
-  yellowColor: {color: 'yellow'},
+  yellowColor: {color: 'yellow', fontSize: 10},
   redColor: {color: 'red'},
   greenColor: {color: 'green'},
 });

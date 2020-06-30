@@ -146,7 +146,9 @@ const styles = StyleSheet.create({
   returnButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4b0082',
+    backgroundColor: 'navy',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
 
   cardItem: {backgroundColor: 'white', width: 120},
