@@ -223,6 +223,13 @@ const dataUser = (prevState = initialValue, action) => {
         data: prevState.data,
         dataLogout: action.payload.data.data,
         error: action.payload.status,
+        dataLogin: {},
+        token: '',
+        role: '',
+        id_user: '',
+        email: '',
+        id: '',
+        refreshtoken: '',
       };
 
     case refreshTokenAction + pending:

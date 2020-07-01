@@ -40,7 +40,10 @@ import {
 import Filter from '../components/Filter';
 import {refreshTokenActionCreator} from '../redux/actions/UserAction.js';
 
-import {getAllBooksActionCreator} from '../redux/actions/BookAction';
+import {
+  getAllBooksActionCreator,
+  getBooksNextPageActionCreator,
+} from '../redux/actions/BookAction';
 import {getAuthorActionCreator} from '../redux/actions/AuthorAction';
 import {getGenreActionCreator} from '../redux/actions/GenreAction';
 import {getUserActionCreator} from '../redux/actions/UserAction';
@@ -193,22 +196,6 @@ class AllBooks extends Component {
 
     // console.log(this.props.isFulfilled)
     await this.props.getAllBooksAction(this.state.token, pageQuery);
-    // await getAllBooks(this.props.token, pageQuery)
-    // .then((response) => {
-    //     this.setState({ data: response.data.data }
-    //     )
-    //     this.setState({ pagination: response.data.pagination }
-    //     )
-    //     this.setState({ isDone: true, isLoading: false }
-    //     )
-    //     console.log(this.state.pagination)
-    //     console.log(pageQuery)
-
-    //     // console.log(this.state.data)
-    //     console.log(response.data.pagination)
-    //   })
-    //   .catch((error) => {
-    //   })
   };
   getData = async () => {
     await this.getToken();
@@ -225,22 +212,6 @@ class AllBooks extends Component {
 
     // console.log(this.props.isFulfilled)
     await this.props.getAllBooksAction(this.state.token, pageQuery);
-    // await getAllBooks(this.props.token, pageQuery)
-    // .then((response) => {
-    //     this.setState({ data: response.data.data }
-    //     )
-    //     this.setState({ pagination: response.data.pagination }
-    //     )
-    //     this.setState({ isDone: true, isLoading: false }
-    //     )
-    //     console.log(this.state.pagination)
-    //     console.log(pageQuery)
-
-    //     // console.log(this.state.data)
-    //     console.log(response.data.pagination)
-    //   })
-    //   .catch((error) => {
-    //   })
   };
   getDataGenre = async () => {
     await this.props.getGenreAction(
@@ -279,15 +250,6 @@ class AllBooks extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
   componentDidMount = async () => {
-    // if(this.props.route.params.title!==''){
-    //   this.setState({title:this.props.route.params.title},()=> this.getData());
-    // }
-    // if (this.state.borrowTemp !== this.props.borrowTemp) {
-    //   this.setState({ borrowTemp: this.props.borrowTemp })
-
-    // }
-    // console.log("sss"+this.state.token)
-
     if (
       (await this.getStoreData('token')) === '' ||
       (await this.getStoreData('token')) === null
@@ -361,11 +323,24 @@ class AllBooks extends Component {
     });
   };
   handleLoadMore = () => {
+    const pageQuery = {
+      page: this.props.pagination.page + 1,
+      limit: this.state.limit,
+      orderBy: this.props.pagination.orderBy,
+      sortBy: this.props.pagination.sortBy,
+      title: this.props.pagination.title,
+    };
+    this.setState({refreshing: false});
+
     if (!this.onEndReachedCalledDuringMomentum) {
       this.setState(
-        {page: 1, limit: this.state.limit + 6, loadMore: true},
+        {
+          page: this.props.pagination.page + 1,
+          // limit: this.state.limit + 6,
+          loadMore: true,
+        },
         () => {
-          this.getNextData();
+          this.props.getBooksNextPageAction(this.state.token, pageQuery);
         },
       );
 
@@ -410,28 +385,6 @@ class AllBooks extends Component {
   //   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   // }
   render() {
-    // const navbarStyle = this.state.isNavBarHidden ? {height: 0} : {};
-
-    // this.componentDidMount()
-    // if(this.props.isRejected===true){
-    //   this.refreshToken()
-    // }
-    // const renderData = this.props.data.map((data, i) => {
-    //   // if(this.props.data.length - 6 === i ||this.props.data.length - 4 === i ||this.props.data.length - 3 === i  ||this.props.data.length - 7 === i){
-    //   return (
-    //     <BookSlide
-    //       data={data}
-    //       key={data.id}
-    //       role={this.props.role ? this.props.role : this.state.role}
-    //       token={this.state.token}
-    //       id_user={this.state.id_user}
-    //       refresh={this.componentDidMount}
-    //       props={this.props}
-    //     />
-    //   );
-    //   // }
-    // });
-
     return (
       <>
         {this.props.data.length <= 0 && this.props.isLoading === true ? (
@@ -450,9 +403,6 @@ class AllBooks extends Component {
                 onPress={() => this.props.navigation.goBack(null)}>
                 <Icon style={styles.backIcon} name="ios-arrow-back" />
               </Button>
-              {/* <Header style={styles.bgColor} searchBar rounded> */}
-
-              {/* <View  > */}
               <Item style={styles.bgColor}>
                 <Icon name="ios-search" style={styles.whiteColor} />
                 <Input
@@ -463,11 +413,6 @@ class AllBooks extends Component {
                   onChangeText={e => this.handlerSearch('title', e)}
                 />
               </Item>
-
-              {/* </View>
-               */}
-              {/* </Header> */}
-
               <View style={styles.viewFilter}>
                 <ScrollView
                   horizontal={true}
@@ -485,9 +430,7 @@ class AllBooks extends Component {
               </View>
               {this.props.pagination.itemFound <= 0 ? (
                 <Container>
-                  <Text style={{paddingLeft: 150, paddingTop: 200}}>
-                    No Result Found
-                  </Text>
+                  <Text style={styles.noResult}>No Result Found</Text>
                 </Container>
               ) : (
                 <FlatList
@@ -517,7 +460,7 @@ class AllBooks extends Component {
                     />
                   }
                   onEndReached={this.handleLoadMore}
-                  onEndReachedThreshold={0.5}
+                  onEndReachedThreshold={0.1}
                   onMomentumScrollBegin={() => {
                     // eslint-disable-next-line no-sequences
                     (this.onEndReachedCalledDuringMomentum = false),
@@ -551,12 +494,6 @@ class AllBooks extends Component {
                 <></>
               )}
             </ImageBackground>
-            {/* {this.state.loadMore ? (
-              // <View style={styles.spinnerStyle}  >
-              <Spinner color="darkcyan" />
-            ) : (
-              <></>
-            )} */}
           </KeyboardAvoidingView>
         )}
 
@@ -569,50 +506,6 @@ class AllBooks extends Component {
         ) : (
           <></>
         )}
-
-        {/* <Footer >
-
-         <FooterMenu role={this.props.role?this.props.role:this.state.role} type="books" props={this.props}/>
-
-        </Footer>
-  */}
-
-        {/* {this.props.isFulfilled === false && !this.state.role && this.props.isRejected=== false ?
-              <Container style={{justifyContent:"center",alignItems:"center"}}  >
-              <Spinner color='darkcyan' />
-              </Container> :
-
-      <Container>
-        <Header style={{backgroundColor:'darklategrey'}} searchBar rounded>
-          <Item >
-            <Icon name="ios-search" />
-            <Input placeholder="Search" onSubmitEditing={this.handlerChange} onChangeText={(e)=> this.handlerSearch('title',e)} />
-
-            <Icon name="book" />
-          </Item>
-
-        </Header>
-        {this.props.isFulfilled === true ?
-        <Content >
-
-        {renderData}
-
-        </Content>:
-            <Content >
-                 <Spinner color='darkcyan' />
-            </Content>
-        }
-
-        <Footer >
-
-         <FooterMenu role={this.state.role} type="books" props={this.props}/>
-
-
-        </Footer>
-
-      </Container>
-
-    } */}
       </>
     );
   }
@@ -641,6 +534,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
+  noResult: {paddingLeft: 150, paddingTop: 200},
   title: {
     fontSize: 32,
   },
@@ -702,6 +596,9 @@ const mapDispatchToProps = dispatch => {
     },
     refreshTokenAction: async body => {
       await dispatch(refreshTokenActionCreator(body));
+    },
+    getBooksNextPageAction: (token, pageQuery) => {
+      dispatch(getBooksNextPageActionCreator(token, pageQuery));
     },
   };
 };

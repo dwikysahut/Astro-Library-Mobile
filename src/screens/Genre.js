@@ -126,19 +126,7 @@ class Genre extends Component {
               <Icon name="add" />
             </Fab>
 
-            <View>
-              {/* <Footer >
-       <FooterMenu role="2" type="author" props={this.props}/>
-
-         {/* {this.props.route.params.role==1?
-           <FooterMenu role="1" type="genre" props={this.props}/>
-             :
-             <FooterMenu role="2"  type="genre" props={this.props}/>
-
-         } */}
-
-              {/* </Footer> */}
-            </View>
+            <View />
           </>
         ) : (
           <>

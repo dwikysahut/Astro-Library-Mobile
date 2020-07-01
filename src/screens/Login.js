@@ -129,7 +129,9 @@ class Login extends Component {
           // Alert.alert('Login success');
           this.setState({email: '', password: ''});
           this.setState({isLoading: false});
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Home', {
+            page: 'Login',
+          });
         }
       }
     }
@@ -265,41 +267,6 @@ class Login extends Component {
     );
   }
 }
-// const styles = StyleSheet.create({
-//   view: { height: "150%" },
-//   card: { height: 400, backgroundColor: "white" },
-//   imageBackground:{
-//     height: 270, width: null, flex: 1, borderRadius: 25,
-//     resizeMode: 'cover',
-//   },
-//   image: { height: 180, width: 120, borderRadius: 0, marginLeft: "-42%", marginTop: 200 },
-//   body: { paddingLeft: 10 },
-//  textTitle: { fontSize: 20, color: "black", marginLeft: "40%", fontWeight: "bold" },
-//   text: { fontSize: 20, fontWeight: "bold" },
-//   textDateAdd:{ color: "black",marginLeft: 10, marginTop: 20 },
-//   textDateUpdate:{ color: "black",  marginLeft: 10 ,marginBottom:20},
-//  deleteButton: { marginLeft: 10, width: "12%" },
-//   buttonNotDelete:{ marginLeft: 10, width: "55%" },
-//   borrowButton:{
-//     marginTop: "10%", position: "absolute",
-//     marginLeft: "50%", borderWidth: 1,
-//     borderColor: 'rgba(0,0,0,0.2)',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     width: "60%",
-//     // height: 60,
-//     borderRadius: 50,
-//   },
-//   item: {
-//     backgroundColor: '#f9c2ff',
-//     padding: 20,
-//     marginVertical: 8,
-//     marginHorizontal: 16,
-//   },
-//   title: {
-//     fontSize: 32,
-//   },
-// });
 const mapStateToProps = ({reducerUser}) => {
   return {
     isRejected: reducerUser.isRejected,

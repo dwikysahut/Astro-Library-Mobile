@@ -12,13 +12,6 @@ const deviceWidth = Dimensions.get('window').width;
 const FIXED_BAR_WIDTH = 280;
 const BAR_SPACE = 10;
 
-// const images = [
-//     [{image:require('../../image/carousel-book.jpg')},{image:require('../../image/carousel2.jpg')},{image:require('../../image/library.jpg')}]
-
-// ]
-// [url=https://ibb.co/sjLwMyJ][img]https://i.ibb.co/rkn614f/carousel-book.jpg[/img][/url]
-// [url=https://ibb.co/BybXZjF][img]https://i.ibb.co/y6twy57/carousel2.jpg[/img][/url]
-// [url=https://ibb.co/qYPFdmR][img]https://i.ibb.co/jk1ZT3L/library.jpg[/img][/url]
 const images = [
   'https://i.ibb.co/87vMVwS/astro1.jpg',
   'https://i.ibb.co/yQmMdnB/astro2.jpg',

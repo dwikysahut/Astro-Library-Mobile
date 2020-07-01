@@ -1,7 +1,8 @@
 import Axios from 'axios';
 import qs from 'qs';
+
 import {REACT_APP_API} from 'react-native-dotenv';
-// const URL_BASE = 'http://10.0.2.2:8080';
+// const URL_BASE = 'http://10.0.2.2:8080'; for avd
 const URL_BASE = REACT_APP_API;
 // process.env.REACT_APP_API; //localhost:3000/books?title=harry potter
 // const URL_API = 'http://localhost:8080'

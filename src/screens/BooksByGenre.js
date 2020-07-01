@@ -34,7 +34,7 @@ import {
   // FooterTab,
   Button,
   Icon,
-  Text,
+  // Text,
 } from 'native-base';
 
 import Filter from '../components/Filter';
@@ -76,6 +76,7 @@ class BooksByGenre extends Component {
       loadMore: false,
       upButton: false,
       showbookSlide: true,
+      isLoading: false,
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
@@ -182,27 +183,11 @@ class BooksByGenre extends Component {
 
     // console.log(this.props.isFulfilled)
     await this.props.getBooksByGenreAction(this.state.token, pageQuery);
-    // await getAllBooks(this.props.token, pageQuery)
-    // .then((response) => {
-    //     this.setState({ data: response.data.data }
-    //     )
-    //     this.setState({ pagination: response.data.pagination }
-    //     )
-    //     this.setState({ isDone: true, isLoading: false }
-    //     )
-    //     console.log(this.state.pagination)
-    //     console.log(pageQuery)
-
-    //     // console.log(this.state.data)
-    //     console.log(response.data.pagination)
-    //   })
-    //   .catch((error) => {
-    //   })
   };
   getData = async () => {
     await this.getToken();
     console.log('sss ' + this.state.token);
-    const {page, limit, orderBy, sortBy, title} = this.state;
+    const {page, limit, orderBy, sortBy} = this.state;
     const pageQuery = {
       page: page,
       limit: limit,
@@ -235,7 +220,11 @@ class BooksByGenre extends Component {
       this.props.token ? this.props.token : this.state.token,
     );
   };
-
+  componentDidUpdate = prevProps => {
+    if (prevProps.dataByGenre !== this.props.dataByGenre) {
+      this.setState({isLoading: false});
+    }
+  };
   onButtonPress = () => {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     // then navigate
@@ -256,8 +245,9 @@ class BooksByGenre extends Component {
       this.props.dataByGenre <= 0 ||
       this.props.route.params.title !== this.state.title
     ) {
-      this.setState({title: this.props.route.params.title}, () =>
-        this.getData(),
+      this.setState(
+        {title: this.props.route.params.title, isLoading: true},
+        () => this.getData(),
       );
     }
     // if (this.state.borrowTemp !== this.props.borrowTemp) {
@@ -417,7 +407,7 @@ class BooksByGenre extends Component {
                   </Text>
                 </Container>
               ) : ( */}
-            {this.props.isLoading === true ? (
+            {this.state.isLoading === true ? (
               <Container style={styles.spinnerStyle}>
                 <Spinner color="darkcyan" />
               </Container>

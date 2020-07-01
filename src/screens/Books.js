@@ -1,7 +1,4 @@
 import React, {Component} from 'react';
-// import FooterMenu from '../components/FooterMenu';
-// import { getAllBooks } from '../utils/http'
-// import BookCard from '../components/BookCard';
 import BookSlide from '../components/BookSlide';
 import Carousel from '../components/Carousel';
 
@@ -16,7 +13,6 @@ import {
   BackHandler,
   Alert,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Spinner, Fab, Icon, Text, Card, CardItem} from 'native-base';
@@ -30,14 +26,16 @@ import {
 } from '../redux/actions/BookAction';
 import {getAuthorActionCreator} from '../redux/actions/AuthorAction';
 import {getGenreActionCreator} from '../redux/actions/GenreAction';
-import {getUserActionCreator} from '../redux/actions/UserAction';
+import {
+  getUserActionCreator,
+  logoutUserActionCreator,
+} from '../redux/actions/UserAction';
 import {getUserBorrowActionCreator} from '../redux/actions/BorrowAction';
 import {getAllBorrowActionCreator} from '../redux/actions/BorrowAction';
 
 // import {Form} from 'react-redux'
 import {connect} from 'react-redux';
 import AllBooksSlide from '../components/AllBooksSlide';
-// import '../styles/Home.css'
 // const qs = require('querystring')
 
 class Books extends Component {
@@ -65,6 +63,8 @@ class Books extends Component {
       loadMore: false,
       upButton: false,
       showbookSlide: true,
+      isLoadingData: false,
+      isLoadingBorrow: true,
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
@@ -100,8 +100,9 @@ class Books extends Component {
     return value;
   };
   refreshToken = async () => {
-    const {refreshToken} = this.state;
-    await this.props.refreshTokenAction({refreshToken});
+    // const {refreshToken} = this.state;
+    const refresh = await AsyncStorage.getItem('refreshToken');
+    await this.props.refreshTokenAction({refreshToken: refresh});
     this.props.navigation.navigate('Home');
   };
   handlerSearch = async (name, e) => {
@@ -202,7 +203,7 @@ class Books extends Component {
         this.props.token ? this.props.token : this.state.token,
       );
     }
-    this.setState({refreshing: false});
+    this.setState({refreshing: false, isLoadingBorrow: false});
   };
   getDataAuthor = async () => {
     await this.props.getAuthorAction(
@@ -231,7 +232,6 @@ class Books extends Component {
     if (this.props.data.length <= 0) {
       await this.getBooks();
     }
-
     // if (this.props.dataHome.length <= 0) {
     //   await this.getHomeBooks();
     // }
@@ -277,12 +277,25 @@ class Books extends Component {
     this.setState({refreshing: false});
     //  await this.setState({data: [...this.state.data,...this.props.data]})
   };
-  componentDidUpdate(prevprops, prevState) {
+  componentDidUpdate = async (prevprops, prevState) => {
     //INI DI UNCOMMENT KLO MAU FETCH ULANG SEHABIS BORROW ATAU RETURN
     // if(prevprops.borrowTemp.length!= this.props.borrowTemp.length){
     //   this.getData()
     //   // this.componentDidMount()
     // }
+    // if(this.props.)
+    if (this.props.errorToken === 'TokenExpiredError') {
+      await this.props.logoutUserAction();
+      // await this.props.clearBorrowAction();
+      await AsyncStorage.clear().then(response => {
+        Alert.alert('Session has Ended, Please Login ..');
+        // Alert.alert('Thank You..');
+        this.setState({isLoading: false});
+        this.props.navigation.navigate('Login');
+      });
+      // this.props.navigation.navigate('Login');
+      // return;
+    }
     if (prevprops.role !== this.props.role) {
       this.getDataBorrowUser();
     }
@@ -291,7 +304,7 @@ class Books extends Component {
       this.getBooks();
       // this.componentDidMount()
     }
-  }
+  };
   goToTop = () => {
     this.scroll.scrollTo({x: 0, y: 0, animated: true});
   };
@@ -353,10 +366,6 @@ class Books extends Component {
   }
   render() {
     console.disableYellowBox = true;
-    // this.componentDidMount()
-    // if(this.props.isRejected===true){
-    //   this.refreshToken()
-    // }
     const renderData = this.props.data.map((data, i) => {
       if (i <= 4) {
         return (
@@ -392,7 +401,7 @@ class Books extends Component {
       return (
         <Card transparent style={styles.image}>
           <TouchableOpacity
-            style={{borderRadius: 20}}
+            style={styles.bookGenreRadius}
             onPress={() => {
               this.props.navigation.navigate('BooksByGenre', {
                 title: data.name.toString(),
@@ -402,15 +411,7 @@ class Books extends Component {
               <ImageBackground
                 source={require('../../image/splashscreen.jpg')}
                 style={styles.image}>
-                <Text
-                  style={{
-                    color: 'black',
-                    textAlign: 'center',
-                    marginTop: '20%',
-                    fontWeight: 'bold',
-                  }}>
-                  {data.name}
-                </Text>
+                <Text style={styles.dataGenreStyls}>{data.name}</Text>
               </ImageBackground>
             </CardItem>
           </TouchableOpacity>
@@ -432,42 +433,36 @@ class Books extends Component {
             source={require('../../image/background.jpeg')}
             style={styles.container}>
             <Carousel />
-            {this.props.dataBorrow ? (
-              <View style={styles.view}>
-                {(this.props.role ? this.props.role : this.state.role) ===
-                  '2' ||
-                (this.props.role ? this.props.role : this.state.role) === 2 ? (
-                  <Text style={styles.borrowTitle}>Your Recent Borrow</Text>
-                ) : (
-                  <Text style={styles.allBorrowTitle}>User Recent Borrow</Text>
-                )}
-                <Text
-                  style={styles.viewMore1}
-                  onPress={() => this.props.navigation.navigate('Borrow')}>
-                  View More &raquo;
-                </Text>
-                <ScrollView style={styles.scrollView1} horizontal>
-                  {this.props.isFullfiledBorrowData ? (
+
+            <View style={styles.view}>
+              {(this.props.role ? this.props.role : this.state.role) === '2' ||
+              (this.props.role ? this.props.role : this.state.role) === 2 ? (
+                <Text style={styles.borrowTitle}>Your Recent Borrow</Text>
+              ) : (
+                <Text style={styles.allBorrowTitle}>User Recent Borrow</Text>
+              )}
+              <Text
+                style={styles.viewMore1}
+                onPress={() => this.props.navigation.navigate('Borrow')}>
+                View More &raquo;
+              </Text>
+              <ScrollView style={styles.scrollView1} horizontal>
+                {this.state.isLoadingBorrow ? (
+                  <Spinner color="white" style={styles.spinner} />
+                ) : this.props.isFullfiledBorrowData ? (
+                  this.props.dataBorrow.length > 0 ? (
                     <>{renderBorrow}</>
                   ) : (
-                    <Spinner color="darkcyan" style={{marginLeft: 200}} />
-                  )}
-                </ScrollView>
-              </View>
-            ) : (
-              <View style={{backgroundColor: 'white', flex: 0.7}}>
-                <Text style={styles.borrowTitle}>Your Recent Borrow</Text>
+                    <Text style={styles.noBorrowed}>
+                      you haven't borrowed yet{' '}
+                    </Text>
+                  )
+                ) : (
+                  <Spinner color="white" style={styles.spinner} />
+                )}
+              </ScrollView>
+            </View>
 
-                <Text
-                  style={{
-                    color: 'black',
-                    paddingLeft: '35%',
-                    paddingTop: '20%',
-                  }}>
-                  No History Found
-                </Text>
-              </View>
-            )}
             <View style={styles.view2}>
               <Text style={styles.bookListText}>Book Category</Text>
               <ScrollView style={styles.scrollView2} horizontal>
@@ -484,13 +479,12 @@ class Books extends Component {
               <ScrollView
                 style={styles.scrollView2}
                 horizontal
-                // refreshControl={
-                //   <RefreshControl
-                //     refreshing={this.state.refreshing}
-                //     onRefresh={this.handleRefresh}
-                //   />
-                // }
-              >
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this.handleRefresh}
+                  />
+                }>
                 {renderData}
               </ScrollView>
             </View>
@@ -542,6 +536,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 20,
   },
+  recentBorrow: {backgroundColor: 'white', flex: 0.7},
   cardItem: {
     backgroundColor: 'rgba(52, 52, 52, 0.2)',
     borderRadius: 20,
@@ -556,6 +551,13 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold',
   },
+  bookGenreRadius: {borderRadius: 20},
+  dataGenreStyls: {
+    color: 'black',
+    textAlign: 'center',
+    marginTop: '20%',
+    fontWeight: 'bold',
+  },
   allBorrowTitle: {
     backgroundColor: 'rgba(52, 52, 52, 0.2)',
     fontSize: 18,
@@ -563,6 +565,12 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 10,
     fontWeight: 'bold',
+  },
+  noBorrowed: {
+    marginLeft: 100,
+    marginTop: 60,
+
+    color: 'white',
   },
   viewMore1: {
     position: 'absolute',
@@ -589,7 +597,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: '72%',
   },
-  scrollView2: {height: 10, backgroundColor: 'rgba(52, 52, 52, 0.2)'},
+  scrollView2: {height: 10, backgroundColor: 'rgba(52, 52, 52, 0)'},
   container: {
     flex: 1,
     height: 900,
@@ -606,12 +614,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  noHistoryFound: {
+    color: 'black',
+    paddingLeft: '35%',
+    paddingTop: '20%',
+  },
   viewFilter: {backgroundColor: 'rgba(52, 52, 52, 0.6)', height: 50},
   spinnerStyle: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  spinner: {marginLeft: 190, marginTop: 20},
 });
 const mapStateToProps = ({
   reducerBook,
@@ -628,7 +642,7 @@ const mapStateToProps = ({
     dataGenre: reducerGenre.data,
     dataAuthor: reducerAuthor.data,
     pagination: reducerBook.pagination,
-    errorToken: reducerBook.errorToken,
+    errorToken: reducerBorrow.errorToken,
     dataUser: reducerUser.data,
     error: reducerBook.error,
     token: reducerUser.token,
@@ -638,6 +652,8 @@ const mapStateToProps = ({
     returnTemp: reducerBorrow.return,
     dataBorrow: reducerBorrow.data,
     isFullfiledBorrowData: reducerBorrow.isFulfilled,
+    isRejectedBorrowData: reducerBorrow.isRejected,
+
     dataHome: reducerBook.dataHome,
   };
 };
@@ -666,6 +682,9 @@ const mapDispatchToProps = dispatch => {
     },
     getHomeBooksAction: (token, pageQuery) => {
       dispatch(getHomeBooksActionCreator(token, pageQuery));
+    },
+    logoutUserAction: async () => {
+      await dispatch(logoutUserActionCreator());
     },
   };
 };

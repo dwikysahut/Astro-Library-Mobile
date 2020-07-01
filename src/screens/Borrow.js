@@ -7,7 +7,7 @@ import CustomHeader from '../components/CustomHeader';
 import BorrowCard from '../components/BorrowCard';
 // import { getUserBorrow, getAllBorrow } from '../utils/http'
 import {ImageBackground, StyleSheet} from 'react-native';
-import {Content} from 'native-base';
+import {Content, Text} from 'native-base';
 
 import {
   getUserBorrowActionCreator,
@@ -28,7 +28,11 @@ class Borrow extends Component {
       token: '',
     };
   }
-
+  componentDidUpdate = prevProps => {
+    if (prevProps.token !== this.props.token) {
+      this.getData();
+    }
+  };
   getStoreData = async name => {
     try {
       const value = await AsyncStorage.getItem(`${name}`);
@@ -104,7 +108,13 @@ class Borrow extends Component {
         source={require('../../image/profilebackground.jpeg')}
         style={styles.imageBackground}>
         <CustomHeader name="Borrow & History" props={this.props} />
-        <Content>{renderData}</Content>
+        {this.props.data.length > 0 ? (
+          <Content>{renderData}</Content>
+        ) : (
+          <Content>
+            <Text style={styles.noBorrow}> you haven't borrowed yet</Text>
+          </Content>
+        )}
       </ImageBackground>
     );
   }
@@ -112,6 +122,13 @@ class Borrow extends Component {
 const styles = StyleSheet.create({
   imageBackground: {flex: 1},
   container: {justifyContent: 'center', alignItems: 'center'},
+  noBorrow: {
+    color: 'white',
+    marginLeft: '20%',
+    marginTop: '50%',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
 const mapStateToProps = ({reducerBorrow, reducerUser}) => {
   return {

@@ -7,6 +7,8 @@ import {
   getUserBorrowAction,
   returnBookAction,
   addBorrowAction,
+  clearBorrowAction,
+  logoutUserAction,
 } from '../actions/actionTypes';
 // import { getAuthorActionByIdCreator } from "../actions/AuthorAction";
 
@@ -60,6 +62,7 @@ const dataBorrow = (prevState = initialValue, action) => {
         isLoading: false,
         isRejected: true,
         isFulfilled: false,
+        errorToken: action.payload.response.data.data.message,
         error: action.payload.message,
       };
     case getUserBorrowAction + fulfilled:
@@ -68,6 +71,7 @@ const dataBorrow = (prevState = initialValue, action) => {
         isLoading: false,
         isRejected: false,
         isFulfilled: true,
+        errorToken: '',
         data: action.payload.data.data,
       };
 
@@ -130,7 +134,22 @@ const dataBorrow = (prevState = initialValue, action) => {
         data: newData,
         return: newData,
       };
+    case clearBorrowAction:
+      return {
+        ...prevState,
+        isLoading: false,
+        isRejected: false,
+        isFulfilled: true,
+        data: [],
+      };
+    case logoutUserAction + fulfilled:
+      //   localStorage.removeItem('token');
+      //   localStorage.setItem('token', action.payload.data.data.token);
 
+      return {
+        ...prevState,
+        errorToken: '',
+      };
     default:
       return {
         ...prevState,

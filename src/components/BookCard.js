@@ -39,7 +39,7 @@ function BookCard({
           </Left>
           <Body style={styles.body}>
             <Text style={styles.text}>{data.title}</Text>
-            <Button style={styles.buttonGenre}>
+            <Button disabled style={styles.buttonGenre}>
               <Text style={styles.textGenre}>{data.genre}</Text>
             </Button>
             <Body />

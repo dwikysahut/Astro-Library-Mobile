@@ -3,7 +3,7 @@ import {Button, Text, View, Item, Input} from 'native-base';
 // import {View} from 'react-native';
 // import {Link} from '@react-navigation/native';
 // import {StyleSheet} from 'react-native';
-import {Alert, ImageBackground} from 'react-native';
+import {Alert, ImageBackground, ToastAndroid} from 'react-native';
 import styles from '../styles/Auth';
 // import { registerUser } from '../utils/http';
 import {registerUserActionCreator} from '../redux/actions/UserAction.js';
@@ -46,14 +46,21 @@ class Register extends Component {
         },
         () => {},
       );
-      console.log(this.state.email);
-      console.log(this.state.password);
     } else {
       this.setState({
         isEmpty: true,
         [name]: '',
       });
     }
+  };
+  showToastMessage = text => {
+    ToastAndroid.showWithGravityAndOffset(
+      text,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50,
+    );
   };
   register = async e => {
     // this.setState({ isSuccess: true })
@@ -64,28 +71,29 @@ class Register extends Component {
       ) {
         // this.setState({ isEmailValid: false })
 
-        Alert.alert('You have entered an invalid email address!');
+        this.showToastMessage('Invalid Email!!');
         return false;
       }
     }
     if (!this.state.email || this.state.email === '') {
-      Alert.alert('Caution', 'email Cannot Empty');
+      this.showToastMessage('Email Cannot Empty');
       this.setState({isEmptyEmail: true});
       return;
     }
     if (this.state.password.length < 4 || this.state.password.length > 16) {
       // return false
-      Alert.alert('Caution', 'The password must be 5-16 characters');
+      this.showToastMessage('Password Must 5-16 characters');
       return false;
     }
     if (!this.state.password || this.state.password === '') {
-      Alert.alert('password Cannot Empty');
+      this.showToastMessage('Password Cannot Empty');
       this.setState({isEmptyPassword: true});
       return;
     }
 
     if (this.state.password2 !== this.state.password) {
-      Alert.alert('Caution', "password and Re-Enter Password Doesn't Match");
+      // Alert.alert('Caution', "password and Re-Enter Password Doesn't Match");
+      this.showToastMessage("password and Re-Enter Password Doesn't Match");
       this.setState({isMatch: false});
       return false;
     } else {
@@ -107,52 +115,8 @@ class Register extends Component {
       }
 
       if (this.props.isRejected === true) {
-        Alert.alert('Register Failed', 'Email has Taken');
+        // Alert.alert('Register Failed', 'Email has Taken');
       }
-
-      // this.setState({ isShow: true })
-      // await registerUser({
-      //     email,
-      //     password,
-      //     role
-
-      // })
-      //     .then((response) => {
-
-      //         // console.log(this.state)
-      //         console.log(response)
-      //         if (response.data.status === 200) {
-      //             this.state.isSuccess = true
-      //             this.setState({ isSuccess: true })
-      //             console.log(this.state.isSuccess)
-      //             alert("Register success")
-
-      //             // console.log(response)
-      //             this.setState({ email: email })
-      //             this.setState({ password: password })
-      //             this.setState({ role: role })
-      //             this.props.navigation.navigate('Login')
-      //         }
-      //         else if (response.data.status === 400) {
-      //             alert("Email has taken")
-      //         }
-      //         else if (response.data.status === 500) {
-      //             alert("error")
-      //         }
-      //         else if (response.status === 204) {
-      //             console.log('cant null')
-      //             alert("email and password must have Value");
-      //         }
-      //         else {
-      //             alert("Register Failed");
-      //         }
-      //     })
-      //     .catch((error) => {
-      //         // alert("Email has taken")
-      //         // console.log(error)
-      //         console.log("aduh error")
-
-      //     })
     }
   };
   shouldComponentUpdate() {
@@ -267,24 +231,6 @@ class Register extends Component {
             <></>
           )}
         </View>
-        {/* <Text style={{ padding: 10, paddingTop: 5 }}>Role</Text> */}
-        {/* <View style={styles.inputView} >
-                    <Item picker>
-                        <Picker
-                            mode="dropdown"
-                            // iosIcon={<Icon name="arrow-down" />}
-                            style={{ width: undefined }}
-                            name="role"
-                            placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor="#007aff"
-                            selectedValue={this.state.role}
-                            onValueChange={(e) => this.handlerChange('role', e)}
-                        >
-                            <Picker.Item label="User" value="2" />
-                        </Picker>
-                    </Item>
-                </View> */}
-
         <Button style={styles.loginBtn} onPress={this.register}>
           <Text style={styles.loginText}> SIGN UP </Text>
         </Button>

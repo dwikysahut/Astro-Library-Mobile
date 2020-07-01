@@ -5,25 +5,13 @@ import {
   getAllBooksActionCreator,
   getHomeBooksActionCreator,
 } from '../redux/actions/BookAction';
-import {connect} from 'react-redux';
-import {
-  // SafeAreaView,
-  StyleSheet,
-  // ScrollView,
-  // View,
-  // Text,
-  // StatusBar,
-  // Button,
-  ImageBackground,
-} from 'react-native';
 
-import {
-  // Header,
-  // LearnMoreLinks,
-  Colors,
-  // DebugInstructions,
-  // ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {getGenreActionCreator} from '../redux/actions/GenreAction';
+
+import {connect} from 'react-redux';
+import {StyleSheet, ImageBackground} from 'react-native';
+
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Container} from 'native-base';
 
 class Home extends Component {
@@ -39,9 +27,6 @@ class Home extends Component {
       token: '',
       login: false,
     };
-    // setTimeout(()=>{
-    //   this.props.navigation.navigate("Login")
-    // },10000);
   }
   getData = async () => {
     // await this.getToken();
@@ -58,22 +43,16 @@ class Home extends Component {
 
     // console.log(this.props.isFulfilled)
     await this.props.getAllBooksAction(this.state.token, pageQuery);
+    await this.props.getGenreAction(this.state.token);
+
     // await this.props.getHomeBooksAction(this.state.token, pageQuery);
     this.setState({loading: false});
-    //  await this.setState({data: [...this.state.data,...this.props.data]})
   };
   getStoreData = async name => {
     const value = await AsyncStorage.getItem(`${name}`);
-    // console.log(value)
     this.setState({name: value});
     return value;
   };
-  // componentDidUpdate(prevProps){
-  //   if(prevProps.isFulfilled!==this.props.isFulfilled && this.state.login===true){
-  //     this.props.navigation.navigate('Home')
-
-  //   }
-  // }
   componentDidMount = async () => {
     if (
       (await this.getStoreData('token')) === '' ||
@@ -180,6 +159,9 @@ const mapDispatchToProps = dispatch => {
     },
     getHomeBooksAction: (token, pageQuery) => {
       dispatch(getHomeBooksActionCreator(token, pageQuery));
+    },
+    getGenreAction: token => {
+      dispatch(getGenreActionCreator(token));
     },
     // refreshTokenAction: async body => {
     //   await dispatch(refreshTokenActionCreator(body));

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   yellowColor: {color: 'yellow', fontSize: 10},
-  redColor: {color: 'red'},
-  greenColor: {color: 'green'},
+  redColor: {color: 'red', fontSize: 10},
+  greenColor: {color: 'green', fontSize: 10},
 });
 export default styles;

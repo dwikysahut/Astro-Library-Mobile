@@ -11,6 +11,7 @@ import {
   Right,
   Item,
   View,
+  Spinner,
 } from 'native-base';
 import {Image, Alert, ImageBackground, StyleSheet} from 'react-native';
 // import {Link} from '@react-navigation/native';
@@ -22,6 +23,7 @@ import ChangePassword from '../components/ChangePassword';
 import AsyncStorage from '@react-native-community/async-storage';
 import {putUserActionCreator} from '../redux/actions/UserAction.js';
 
+import {clearBorrowActionCreator} from '../redux/actions/BorrowAction.js';
 import {logoutUserActionCreator} from '../redux/actions/UserAction.js';
 import {connect} from 'react-redux';
 class Profile extends Component {
@@ -32,6 +34,7 @@ class Profile extends Component {
       role: '',
       token: '',
       id: '',
+      isLoading: false,
     };
   }
   getStoreData = async name => {
@@ -78,9 +81,12 @@ class Profile extends Component {
         {
           text: 'OK',
           onPress: async () => {
+            this.setState({isLoading: true});
             await this.props.logoutUserAction();
+            await this.props.clearBorrowAction();
             await AsyncStorage.clear().then(response => {
               Alert.alert('Thank You..');
+              this.setState({isLoading: false});
               this.props.navigation.navigate('Login');
             });
           },
@@ -156,10 +162,17 @@ class Profile extends Component {
                 )}
               </Left>
               <Right>
-                <Button style={styles.buttonLogout} onPress={this.logout}>
-                  <Thumbnail small source={require('../../image/logout.png')} />
-                  <Text style={styles.black}>Logout</Text>
-                </Button>
+                {this.state.isLoading ? (
+                  <Spinner style={styles.buttonLogout} color="black" />
+                ) : (
+                  <Button style={styles.buttonLogout} onPress={this.logout}>
+                    <Thumbnail
+                      small
+                      source={require('../../image/logout.png')}
+                    />
+                    <Text style={styles.black}>Logout</Text>
+                  </Button>
+                )}
               </Right>
             </CardItem>
           </Card>
@@ -254,6 +267,9 @@ const mapDispatchToProps = dispatch => {
     },
     putUserAction: (token, id, body) => {
       dispatch(putUserActionCreator(token, id, body));
+    },
+    clearBorrowAction: () => {
+      dispatch(clearBorrowActionCreator());
     },
   };
 };

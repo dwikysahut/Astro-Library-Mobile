@@ -8,11 +8,11 @@ import {
   getHomeBooksAction,
   getBooksByGenreAction,
   getBookByGenreOnIdAction,
+  getBooksNextPageAction,
 } from './actionTypes';
 import {
   getAllBooks,
   getDetailBook,
-  getBookById,
   postBook,
   editBook,
   deleteBook,
@@ -31,6 +31,12 @@ export const getHomeBooksActionCreator = (token, body) => {
     payload: getAllBooks(token, body),
   };
 };
+export const getBooksNextPageActionCreator = (token, body) => {
+  return {
+    type: getBooksNextPageAction,
+    payload: getAllBooks(token, body),
+  };
+};
 export const getDetailBookActionCreator = (token, id) => {
   return {
     type: getDetailBookAction,
@@ -46,12 +52,14 @@ export const getBooksByGenreActionCreator = (token, body) => {
 export const getBookByGenreOnIdActionCreator = id => {
   return {
     type: getBookByGenreOnIdAction,
+    // eslint-disable-next-line radix
     payload: parseInt(id),
   };
 };
 export const getBookByIdActionCreator = id => {
   return {
     type: getBookByIdAction,
+    // eslint-disable-next-line radix
     payload: parseInt(id),
   };
 };

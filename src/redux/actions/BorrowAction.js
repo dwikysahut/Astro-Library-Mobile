@@ -3,6 +3,7 @@ import {
   addBorrowAction,
   returnBookAction,
   getUserBorrowAction,
+  clearBorrowAction,
 } from './actionTypes';
 import {
   getUserBorrow,
@@ -36,5 +37,12 @@ export const returnBookActionCreator = (token, id, body) => {
   return {
     type: returnBookAction,
     payload: returnBook(token, id, body),
+  };
+};
+
+export const clearBorrowActionCreator = () => {
+  return {
+    type: clearBorrowAction,
+    payload: '',
   };
 };
