@@ -311,8 +311,7 @@ class BooksByGenre extends Component {
   };
   handleLoadMore = () => {
     if (
-      this.props.paginationByGenre.page <
-      this.props.paginationByGenre.totalPage
+      this.props.paginationByGenre.page < this.props.paginationByGenre.totalPage
     ) {
       const pageQuery = {
         page: this.props.paginationByGenre.page + 1,
