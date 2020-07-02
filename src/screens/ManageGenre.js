@@ -76,7 +76,7 @@ class ManageGenre extends Component {
       name,
     });
     this.setState({isShow: false});
-    Alert.alert('edit Successfull');
+    Alert.alert('Edit Successfull');
 
     this.props.navigation.navigate('Genre');
   };

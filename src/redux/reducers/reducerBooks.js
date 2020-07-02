@@ -15,6 +15,7 @@ import {
   getBooksByGenreAction,
   getBookByGenreOnIdAction,
   getBooksNextPageAction,
+  getBooksByGenreNextPageAction,
 } from '../actions/actionTypes';
 
 const initialValue = {
@@ -108,6 +109,35 @@ const dataBook = (prevState = initialValue, action) => {
         dataByGenre: action.payload.data.data,
         paginationByGenre: action.payload.data.pagination,
       };
+
+    case getBooksByGenreNextPageAction + pending:
+      return {
+        ...prevState,
+        isLoading: true,
+        isRejected: false,
+        isFulfilled: false,
+      };
+    case getBooksByGenreNextPageAction + rejected:
+      return {
+        ...prevState,
+        isLoading: false,
+        isRejected: true,
+        isFulfilled: false,
+        error: action.payload.message,
+      };
+    case getBooksByGenreNextPageAction + fulfilled:
+      const dataByGenrePage = prevState.dataByGenre.concat(
+        action.payload.data.data,
+      );
+      return {
+        ...prevState,
+        isLoading: false,
+        isRejected: false,
+        isFulfilled: true,
+        dataByGenre: dataByGenrePage,
+        paginationByGenre: action.payload.data.pagination,
+      };
+
     case getHomeBooksAction + pending:
       return {
         ...prevState,

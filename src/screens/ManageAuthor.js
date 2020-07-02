@@ -78,7 +78,7 @@ class ManageAuthor extends Component {
 
     await this.props.putAuthorAction(this.state.token, id, {name});
     this.setState({isShow: false});
-    Alert.alert('edit Successfull');
+    Alert.alert('Edit Successfull');
     this.props.navigation.navigate('Author');
   };
   componentDidUpdate = prevState => {};

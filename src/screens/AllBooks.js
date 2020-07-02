@@ -70,7 +70,7 @@ class AllBooks extends Component {
       role: '',
       id_user: '',
       refreshing: false,
-      loading: true,
+      loading: false,
       refreshToken: '',
       reload: false,
       borrowTemp: [],
@@ -128,11 +128,8 @@ class AllBooks extends Component {
     this.setState({[name]: e});
   };
   handlerChange = async (name, e) => {
-    // if(this.state.title=""){
-    //   this.getData()
-    // }
-    // e.preventDefault()
-    this.setState({[name]: e}, () => {
+    // this.setState({loading: true});
+    this.setState({[name]: e, loading: true}, () => {
       this.getData();
     });
   };
@@ -181,29 +178,12 @@ class AllBooks extends Component {
       );
     }
   };
-  getNextData = async () => {
-    await this.getToken();
-    console.log('sss ' + this.state.token);
-    // const {page, limit, orderBy, sortBy, title} = this.state;
-    const pageQuery = {
-      page: this.props.pagination.page,
-      limit: this.state.limit,
-      orderBy: this.props.pagination.orderBy,
-      sortBy: this.props.pagination.sortBy,
-      title: this.props.pagination.title,
-    };
-    this.setState({refreshing: false});
-
-    // console.log(this.props.isFulfilled)
-    await this.props.getAllBooksAction(this.state.token, pageQuery);
-  };
   getData = async () => {
-    await this.getToken();
     console.log('sss ' + this.state.token);
     const {page, limit, orderBy, sortBy, title} = this.state;
     const pageQuery = {
-      page: page,
-      limit: limit,
+      page: 1,
+      limit: 6,
       orderBy: orderBy,
       sortBy: sortBy,
       title: title,
@@ -212,6 +192,7 @@ class AllBooks extends Component {
 
     // console.log(this.props.isFulfilled)
     await this.props.getAllBooksAction(this.state.token, pageQuery);
+    this.setState({loading: false});
   };
   getDataGenre = async () => {
     await this.props.getGenreAction(
@@ -323,28 +304,30 @@ class AllBooks extends Component {
     });
   };
   handleLoadMore = () => {
-    const pageQuery = {
-      page: this.props.pagination.page + 1,
-      limit: this.state.limit,
-      orderBy: this.props.pagination.orderBy,
-      sortBy: this.props.pagination.sortBy,
-      title: this.props.pagination.title,
-    };
-    this.setState({refreshing: false});
+    if (this.props.pagination.page < this.props.pagination.totalPage) {
+      const pageQuery = {
+        page: this.props.pagination.page + 1,
+        limit: this.state.limit,
+        orderBy: this.props.pagination.orderBy,
+        sortBy: this.props.pagination.sortBy,
+        title: this.props.pagination.title,
+      };
+      this.setState({refreshing: false});
 
-    if (!this.onEndReachedCalledDuringMomentum) {
-      this.setState(
-        {
-          page: this.props.pagination.page + 1,
-          // limit: this.state.limit + 6,
-          loadMore: true,
-        },
-        () => {
-          this.props.getBooksNextPageAction(this.state.token, pageQuery);
-        },
-      );
+      if (!this.onEndReachedCalledDuringMomentum) {
+        this.setState(
+          {
+            page: this.props.pagination.page + 1,
+            // limit: this.state.limit + 6,
+            loadMore: true,
+          },
+          () => {
+            this.props.getBooksNextPageAction(this.state.token, pageQuery);
+          },
+        );
 
-      this.onEndReachedCalledDuringMomentum = true;
+        this.onEndReachedCalledDuringMomentum = true;
+      }
     }
     // console.warn('handleload')
   };
@@ -359,31 +342,6 @@ class AllBooks extends Component {
       </View>
     );
   };
-  //   onButtonPress = () => {
-  //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  //     // then navigate
-  //     navigate('NewScreen');
-  //   }
-
-  // handleBackButton = () => {
-  //   Alert.alert(
-  //       'Exit App',
-  //       'Exiting the application?', [{
-  //           text: 'Cancel',
-  //           onPress: () => console.log('Cancel Pressed'),
-  //           style: 'cancel'
-  //       }, {
-  //           text: 'OK',
-  //           onPress: () => BackHandler.exitApp()
-  //       }, ], {
-  //           cancelable: false
-  //       }
-  //    )
-  //    return true;
-  //  }
-  //  componentWillUnmount() {
-  //   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  // }
   render() {
     return (
       <>
@@ -431,6 +389,10 @@ class AllBooks extends Component {
               {this.props.pagination.itemFound <= 0 ? (
                 <Container>
                   <Text style={styles.noResult}>No Result Found</Text>
+                </Container>
+              ) : this.state.loading ? (
+                <Container style={styles.spinnerStyle}>
+                  <Spinner color="darkcyan" />
                 </Container>
               ) : (
                 <FlatList

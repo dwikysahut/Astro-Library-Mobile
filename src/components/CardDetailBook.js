@@ -84,16 +84,6 @@ function CardDetailBook({
     // return refresh()
   }
 
-  // function handleHide() {
-  //   setIsShow(false);
-  //   // props.history.push('/book')
-  // }
-  // function handleShow() {
-  //   setIsShow(true);
-  // }
-
-  // let button;
-
   return (
     <>
       <Animated.View
@@ -143,24 +133,24 @@ function CardDetailBook({
           </Text>
         </Body>
       </Animated.View>
-      <Body>
-        <Left>
-          <Image
-            source={{uri: `${URL_BASE}/public/image/` + data.image}}
-            style={styles.image}
-          />
-        </Left>
+      <Left>
+        <Image
+          source={{uri: `${URL_BASE}/public/image/` + data.image}}
+          style={styles.image}
+        />
+      </Left>
 
-        {/* <Text style={styles.textTitle}>{data.title}</Text>
+      {/* <Text style={styles.textTitle}>{data.title}</Text>
             <Text note style={styles.textGenre}>
               {data.genre}
             </Text> */}
-
+      <Right>
         <Button transparent disabled iconLeft style={styles.authorButton}>
           <Icon active name="person" />
           <Text style={styles.authorText}>{data.author}</Text>
         </Button>
-      </Body>
+      </Right>
+
       {/* <Right>
         <Text style={{color:"white"}}>{data.title}</Text>
         </Right> */}
@@ -234,7 +224,7 @@ function CardDetailBook({
                     {cancelable: false},
                   )
                 }>
-                <Icon style={styles.whiteColor} name="trash" />
+                <Icon style={styles.blackColor} name="trash" />
               </Button>
             ) : (
               <Button light bordered disabled style={styles.buttonNotDelete}>
@@ -260,7 +250,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   imageBackground2: {height: 500, width: '100%'},
-  paddingBody: {padding: 40},
+  paddingBody: {padding: 40, paddingLeft: '15%'},
 
   card2: {
     backgroundColor: 'white',
@@ -275,13 +265,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: '-42%',
     marginTop: '10%',
+    // marginRight: 20,
   },
   body: {paddingLeft: 10},
   textTitle: {
     fontSize: 20,
     color: 'black',
-    marginLeft: '40%',
+    marginStart: '40%',
+    marginEnd: 10,
     fontWeight: 'bold',
+    textAlign: 'right',
   },
   text: {fontSize: 20, fontWeight: 'bold'},
   titleDesc: {
@@ -292,7 +285,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingBottom: 30,
   },
-  textGenre: {fontSize: 12, color: 'black', marginTop: 0, paddingLeft: '10%'},
+  textGenre: {fontSize: 12, color: 'black', marginTop: 0, paddingStart: '15%'},
   textDateAdd: {color: 'black', marginLeft: 10, marginTop: 20},
   textDateUpdate: {color: 'black', marginLeft: 10, marginBottom: 20},
   deleteButton: {marginLeft: 10, width: '12%'},
@@ -333,6 +326,8 @@ const styles = StyleSheet.create({
   },
   backButton: {left: 0, top: '40%', width: '10%', position: 'absolute'},
   whiteColor: {color: 'white', left: 0, top: 0},
+  blackColor: {color: 'black', left: 0, top: 0},
+
   statusButton: {marginLeft: '63%', marginRight: '0%'},
 
   animatedHeaderContainer: {
@@ -347,13 +342,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 22,
   },
-  // item: {
-  //   backgroundColor: '#ff9e80',
-  //   margin: 8,
-  //   height: 45,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   itemText: {
     color: 'black',
     fontSize: 16,

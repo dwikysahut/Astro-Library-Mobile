@@ -119,15 +119,6 @@ class DetailBook extends Component {
       outputRange: ['#e91e63', '#1DA1F2'],
       extrapolate: 'clamp',
     });
-    //   if(this.props.isRejected===true){
-
-    //     alert('Token Expire')
-    //     this.props.history.push('/auth/token')
-
-    //   console.log(this.props.errorToken)
-    // }
-    // const { object } = this.state
-    // console.log(this.props.title)
 
     const renderDataDetail = this.props.dataById.map(dataDetail => {
       return (

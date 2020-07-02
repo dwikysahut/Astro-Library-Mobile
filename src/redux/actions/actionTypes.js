@@ -43,6 +43,8 @@ export const editBookAction = 'EDIT_BOOK';
 export const deleteBookAction = 'DELETE_BOOK';
 export const getHomeBooksAction = 'GET_HOME_BOOKS';
 export const getBooksNextPageAction = 'GET_NEXT_PAGE_BOOKS';
+export const getBooksByGenreNextPageAction = 'GET_NEXT_PAGE_BOOKS_BY_GENRE';
+
 export const getBooksByGenreAction = 'GET_BOOKS_BY_GENRE';
 export const getBookByGenreOnIdAction = 'GET_BOOK_BY_GENRE_ID';
 export const pending = '_PENDING';

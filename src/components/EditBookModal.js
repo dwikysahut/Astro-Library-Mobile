@@ -273,6 +273,7 @@ class EditBookModal extends Component {
                     <Label>Description</Label>
                     <Textarea
                       rowSpan={5}
+                      style={styles.textArea}
                       bordered
                       defaultValue={this.props.data.description}
                       onChangeText={e => this.handlerChange('description', e)}
@@ -305,7 +306,7 @@ class EditBookModal extends Component {
                     bordered
                     style={styles.buttonImage}
                     onPress={this.openUpload}>
-                    <Text>Choose Image</Text>
+                    <Text>Choose File</Text>
                   </Button>
 
                   <Item>
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
     bottom: 35,
     right: 35,
   },
-
+  textArea: {width: 250},
   centeredView: {
     flex: 1,
     justifyContent: 'center',

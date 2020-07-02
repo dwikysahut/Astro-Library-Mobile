@@ -148,35 +148,9 @@ class AddBookModal extends Component {
     this.setState({isFill: true});
     this.setState({isImage: true});
 
-    // const photo = {
-    //     uri: photo.uri,
-    //     type: 'image/jpg',
-    //     name: newUser.avatar.fileName,
-    // };
-    // e.preventDefault()
-    // if (!this.state.title || !this.state.description) {
-    //     this.setState({isFill:false})
-
-    //     // alert("Data can't Empty")
-    //     return false
-    // }
-
-    //  this.setState({isDone:true})
-    //  const id=this.props.match.params.id
-    // if (this.state.isFill === true) {
-
     formData.append('title', this.state.title);
     formData.append('description', this.state.description);
-    // if(this.state.photo!==''){
-    //     await formData.append('image', {uri: image.uri, name: image.fileName, type: 'image/jpg'})
-    //     console.log(this.state.photo.fileName)
-    //     console.log(this.state.photo.type)
-    // }
-    // // }
-    // else{
     await formData.append('image', this.state.image);
-    // }
-
     formData.append('genre_id', this.state.genre_id);
     formData.append('author_id', this.state.author_id);
     formData.append('status', this.state.status);
@@ -193,9 +167,6 @@ class AddBookModal extends Component {
       Alert.alert('Success', 'Add Book Successfully');
       //   return this.props.refresh();
     }
-    // console.log({error})
-
-    // }
   };
 
   componentDidMount = async () => {
@@ -228,15 +199,6 @@ class AddBookModal extends Component {
     //   const [modalVisible, setModalVisible] = useState(false);
     return (
       <>
-        {/* <View>
-                { photo ?
-
-
-            <Image source={{uri:photo.uri}} style={{width:300,height:300}}/>
-            :<Text>sdasd</Text>
-        }
-            </View> */}
-
         <Modal
           animationType="slide"
           transparent={true}
@@ -262,16 +224,12 @@ class AddBookModal extends Component {
                   <Item stackedLabel>
                     <Label>Description</Label>
                     <Textarea
-                      style={styles.texArea}
+                      style={styles.textArea}
                       rowSpan={5}
                       bordered
                       onChangeText={e => this.handlerChange('description', e)}
                     />
                   </Item>
-                  {/* <Item stackedLabel>
-              <Label>Image</Label>
-              <Input defaultValue={this.props.data.fileName} />
-            // </Item> */}
                   <Item stackedLabel>
                     <Label style={styles.labelImage}>Image</Label>
                     {/* {/* <View> */}
@@ -379,18 +337,6 @@ class AddBookModal extends Component {
             <Icon name="paper" style={styles.whiteColor} />
           </Button>
         </Fab>
-        {/* <Fab
-     active={this.state.active}
-     direction="up"
-     containerStyle={{ }}
-     style={{ backgroundColor: '#5067FF',marginBottom:50 }}
-     position="bottomRight"
-     onPress={() => this.setState({ active: !this.state.active })}>
-     <Icon name="home" />
-            <Button style={{ backgroundColor: '#34A34F' }}>
-              <Icon name="logo-whatsapp" />
-            </Button>
-   </Fab> */}
       </>
     );
   }
@@ -398,7 +344,7 @@ class AddBookModal extends Component {
 const styles = StyleSheet.create({
   contentPadding: {width: 300},
   textAddBook: {fontSize: 40},
-  texArea: {width: 250},
+  textArea: {width: 250},
   labelImage: {marginBottom: 10},
   imageStyle: {width: 300, height: 300},
   buttonImage: {

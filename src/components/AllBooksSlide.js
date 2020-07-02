@@ -6,21 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {
-  // Container,
-  // Header,
-  // Content,
-  Card,
-  CardItem,
-  // Thumbnail,
-  // Text,
-  // Button,
-  // Icon,
-  // Left,
-  // Body,
-  // Right,
-  // Item,
-} from 'native-base';
+import {Card, CardItem} from 'native-base';
 import {REACT_APP_API} from 'react-native-dotenv';
 function AllBooksSlide({
   data,

@@ -40,7 +40,10 @@ import {
 import Filter from '../components/Filter';
 import {refreshTokenActionCreator} from '../redux/actions/UserAction.js';
 
-import {getBooksByGenreActionCreator} from '../redux/actions/BookAction';
+import {
+  getBooksByGenreActionCreator,
+  getBooksByGenreNextPageActionCreator,
+} from '../redux/actions/BookAction';
 import {getAuthorActionCreator} from '../redux/actions/AuthorAction';
 import {getGenreActionCreator} from '../redux/actions/GenreAction';
 import {getUserActionCreator} from '../redux/actions/UserAction';
@@ -168,24 +171,8 @@ class BooksByGenre extends Component {
       );
     }
   };
-  getNextData = async () => {
-    await this.getToken();
-    console.log('sss ' + this.state.token);
-    // const {page, limit, orderBy, sortBy, title} = this.state;
-    const pageQuery = {
-      page: this.props.paginationByGenre.page,
-      limit: this.state.limit,
-      orderBy: this.props.paginationByGenre.orderBy,
-      sortBy: this.props.paginationByGenre.sortBy,
-      title: this.props.route.params.title,
-    };
-    this.setState({refreshing: false});
-
-    // console.log(this.props.isFulfilled)
-    await this.props.getBooksByGenreAction(this.state.token, pageQuery);
-  };
   getData = async () => {
-    await this.getToken();
+    // await this.getToken();
     console.log('sss ' + this.state.token);
     const {page, limit, orderBy, sortBy} = this.state;
     const pageQuery = {
@@ -250,12 +237,6 @@ class BooksByGenre extends Component {
         () => this.getData(),
       );
     }
-    // if (this.state.borrowTemp !== this.props.borrowTemp) {
-    //   this.setState({ borrowTemp: this.props.borrowTemp })
-
-    // }
-    // console.log("sss"+this.state.token)
-
     if (
       (await this.getStoreData('token')) === '' ||
       (await this.getStoreData('token')) === null
@@ -329,15 +310,36 @@ class BooksByGenre extends Component {
     });
   };
   handleLoadMore = () => {
-    if (!this.onEndReachedCalledDuringMomentum) {
-      this.setState(
-        {page: 1, limit: this.state.limit + 6, loadMore: true},
-        () => {
-          this.getNextData();
-        },
-      );
+    if (
+      this.props.paginationByGenre.page <
+      this.props.paginationByGenre.totalPage
+    ) {
+      const pageQuery = {
+        page: this.props.paginationByGenre.page + 1,
+        limit: this.state.limit,
+        orderBy: this.props.paginationByGenre.orderBy,
+        sortBy: this.props.paginationByGenre.sortBy,
+        title: this.state.title,
+      };
+      this.setState({refreshing: false});
 
-      this.onEndReachedCalledDuringMomentum = true;
+      if (!this.onEndReachedCalledDuringMomentum) {
+        this.setState(
+          {
+            page: this.props.paginationByGenre.page + 1,
+            // limit: this.state.limit + 6,
+            loadMore: true,
+          },
+          () => {
+            this.props.getBooksByGenreNextPageAction(
+              this.state.token,
+              pageQuery,
+            );
+          },
+        );
+
+        this.onEndReachedCalledDuringMomentum = true;
+      }
     }
     // console.warn('handleload')
   };
@@ -567,6 +569,9 @@ const mapDispatchToProps = dispatch => {
     getBooksByGenreAction: (token, pageQuery) => {
       dispatch(getBooksByGenreActionCreator(token, pageQuery));
     },
+    getBooksByGenreNextPageAction: (token, pageQuery) => {
+      dispatch(getBooksByGenreNextPageActionCreator(token, pageQuery));
+    },
     getGenreAction: token => {
       dispatch(getGenreActionCreator(token));
     },
@@ -578,9 +583,6 @@ const mapDispatchToProps = dispatch => {
     },
     getUserBorrowAction: token => {
       dispatch(getUserBorrowActionCreator(token));
-    },
-    refreshTokenAction: async body => {
-      await dispatch(refreshTokenActionCreator(body));
     },
   };
 };

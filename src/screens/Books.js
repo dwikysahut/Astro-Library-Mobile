@@ -239,7 +239,6 @@ class Books extends Component {
 
     await this.getToken();
     await this.getIdUser();
-
     await this.getRole();
     await this.getStoreData('refreshToken');
     this.getDataGenre();
@@ -318,19 +317,6 @@ class Books extends Component {
       this.getDataBorrowUser();
       this.getBooks();
     });
-  };
-  handleLoadMore = () => {
-    if (!this.onEndReachedCalledDuringMomentum) {
-      this.setState(
-        {page: 1, limit: this.state.limit + 3, loadMore: true},
-        () => {
-          this.getBooks();
-        },
-      );
-
-      this.onEndReachedCalledDuringMomentum = true;
-    }
-    // console.warn('handleload')
   };
 
   onButtonPress = () => {

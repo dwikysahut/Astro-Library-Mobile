@@ -32,7 +32,7 @@ const ManageData = ({
 
         <Form>
           <Item floatingLabel>
-            <Label>Name</Label>
+            {name ? <Label /> : <Label>Name</Label>}
             <Input value={name} onChangeText={handlerChange} />
           </Item>
         </Form>

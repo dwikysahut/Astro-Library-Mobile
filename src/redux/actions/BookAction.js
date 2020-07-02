@@ -9,6 +9,7 @@ import {
   getBooksByGenreAction,
   getBookByGenreOnIdAction,
   getBooksNextPageAction,
+  getBooksByGenreNextPageAction,
 } from './actionTypes';
 import {
   getAllBooks,
@@ -46,6 +47,12 @@ export const getDetailBookActionCreator = (token, id) => {
 export const getBooksByGenreActionCreator = (token, body) => {
   return {
     type: getBooksByGenreAction,
+    payload: getAllBooks(token, body),
+  };
+};
+export const getBooksByGenreNextPageActionCreator = (token, body) => {
+  return {
+    type: getBooksByGenreNextPageAction,
     payload: getAllBooks(token, body),
   };
 };

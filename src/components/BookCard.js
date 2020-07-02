@@ -49,15 +49,6 @@ function BookCard({
             <Text note style={styles.textDate}>
               {new Date(data.date_added).toDateString()}
             </Text>
-
-            {/* <Button  iconLeft transparent  light style={{marginLeft:45}}>
-               <Icon name='cart' style={{color:"black"}}/>
-                {data.status==="Unavailable"?
-              <Text style={{color:"red"}}>{data.status}</Text>:
-               <Text  style={{color:"black"}}>{data.status}</Text>
-
-                }
-                </Button> */}
           </Body>
         </CardItem>
       </Card>
