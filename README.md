@@ -50,7 +50,8 @@ example
 REACT_APP_API=http://YOUR_IP_ADDRESS:8080  
 
 ```
-6. Type `react-native run-android` or `yarn run android` if you use yarn
+5. clone [`Backend-Astro-Library-API`](https://github.com/dwikysahut/Backend-Astro-Library-API) and follow Usage for Development
+6. After Backend ready, go to his project again and Type `react-native run-android` or `yarn run android` if you use yarn
 7. Register your account
 8. Login to use
 9. Lets find and borrow your favorite books !!
