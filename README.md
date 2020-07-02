@@ -39,7 +39,17 @@ this app built with React Native and the database use MySql. Astro Library helps
 1. Clone this Project 
 2. Open app's directory in CMD or Terminal
 3. Type `npm install` or `yarn install`
-4. make the env file on root folder and fill REACT_APP_API with your address and backend port
+4. make the env file on root folder and fill REACT_APP_API with your address and backend port (10.2.2 for avd and ip machine for physical device)
+```
+REACT_APP_API=http://YOUR_IP_ADDRESS:PORT BACKEND  
+
+```
+
+example
+```
+REACT_APP_API=http://YOUR_IP_ADDRESS:8080  
+
+```
 6. Type `react-native run-android` or `yarn run android` if you use yarn
 7. Register your account
 8. Login to use
