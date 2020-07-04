@@ -110,12 +110,9 @@ class Register extends Component {
         await this.props.registerUserAction({email, password, role});
         this.setState({isSuccess: true});
         console.disableYellowBox = true;
+        this.setState({email: '', password: '', password2: ''});
       } catch (error) {
-        Alert.alert('Register Failed', 'Email has Taken');
-      }
-
-      if (this.props.isRejected === true) {
-        // Alert.alert('Register Failed', 'Email has Taken');
+        Alert.alert('Register Failed', 'Email has already exist');
       }
     }
   };

@@ -135,7 +135,7 @@ const dataUser = (prevState = initialValue, action) => {
         error: action.payload.response.status,
       };
     case registerUserAction + fulfilled:
-      prevState.data.push(action.payload.data.data);
+      // prevState.data.push(action.payload.data.data);
 
       return {
         ...prevState,
@@ -184,7 +184,7 @@ const dataUser = (prevState = initialValue, action) => {
           id_user: action.payload.data.data.id,
           email: action.payload.data.data.email,
           id: action.payload.data.data.id,
-          refreshtoken: action.payload.data.data.refreshToken,
+          refreshToken: action.payload.data.data.refreshToken,
         };
       }
 
@@ -259,7 +259,7 @@ const dataUser = (prevState = initialValue, action) => {
         // data: prevState.data,
         dataToken: action.payload.data.data,
         token: action.payload.data.data.token,
-        refreshtoken: action.payload.data.data.refreshToken,
+        refreshToken: action.payload.data.data.refreshToken,
         // error:action.payload.status
       };
 

@@ -31,7 +31,10 @@ import {
   logoutUserActionCreator,
 } from '../redux/actions/UserAction';
 import {getUserBorrowActionCreator} from '../redux/actions/BorrowAction';
-import {getAllBorrowActionCreator} from '../redux/actions/BorrowAction';
+import {
+  getAllBorrowActionCreator,
+  clearBorrowActionCreator,
+} from '../redux/actions/BorrowAction';
 
 // import {Form} from 'react-redux'
 import {connect} from 'react-redux';
@@ -71,7 +74,13 @@ class Books extends Component {
   handleScroll = () => {
     this.setState({isNavBarHidden: true});
   };
-
+  storeData = async (name, value) => {
+    try {
+      await AsyncStorage.setItem(`${name}`, value.toString());
+    } catch (e) {
+      // saving error
+    }
+  };
   _listViewOffset = 0;
   getToken = async () => {
     const value = await AsyncStorage.getItem('token');
@@ -102,7 +111,7 @@ class Books extends Component {
   refreshToken = async () => {
     // const {refreshToken} = this.state;
     const refresh = await AsyncStorage.getItem('refreshToken');
-    await this.props.refreshTokenAction({refreshToken: refresh});
+    await this.props.refreshTokenAction({token: refresh});
     this.props.navigation.navigate('Home');
   };
   handlerSearch = async (name, e) => {
@@ -221,13 +230,13 @@ class Books extends Component {
       this.setState({borrowTemp: this.props.borrowTemp});
       await this.getBooks();
     }
-    if (
-      (await this.getStoreData('token')) === '' ||
-      (await this.getStoreData('token')) === null
-    ) {
-      Alert.alert('please login');
-      this.props.navigation.navigate('Login');
-    }
+    // if (
+    //   (await this.getStoreData('token')) === '' ||
+    //   (await this.getStoreData('token')) === null
+    // ) {
+    //   Alert.alert('please login');
+    //   this.props.navigation.navigate('Login');
+    // }
     console.disableYellowBox = true;
     if (this.props.data.length <= 0) {
       await this.getBooks();
@@ -276,6 +285,14 @@ class Books extends Component {
     this.setState({refreshing: false});
     //  await this.setState({data: [...this.state.data,...this.props.data]})
   };
+  async removeItemValue(key) {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
   componentDidUpdate = async (prevprops, prevState) => {
     //INI DI UNCOMMENT KLO MAU FETCH ULANG SEHABIS BORROW ATAU RETURN
     // if(prevprops.borrowTemp.length!= this.props.borrowTemp.length){
@@ -283,18 +300,49 @@ class Books extends Component {
     //   // this.componentDidMount()
     // }
     // if(this.props.)
-    if (this.props.errorToken === 'TokenExpiredError') {
-      await this.props.logoutUserAction();
-      // await this.props.clearBorrowAction();
-      await AsyncStorage.clear().then(response => {
-        Alert.alert('Session has Ended, Please Login ..');
-        // Alert.alert('Thank You..');
-        this.setState({isLoading: false});
-        this.props.navigation.navigate('Login');
-      });
-      // this.props.navigation.navigate('Login');
-      // return;
+    if (prevprops.errorToken !== this.props.errorToken) {
+      if (this.props.errorToken === 'TokenExpiredError') {
+        AsyncStorage.getItem('refreshToken');
+        console.log(this.props.refreshToken);
+        console.log(await AsyncStorage.getItem('refreshToken'));
+        // AsyncStorage.removeItem('refreshToken');
+        // AsyncStorage.removeItem('token');
+        try {
+          await this.props.refreshTokenAction({
+            token: this.props.refreshToken
+              ? this.props.refreshToken
+              : this.state.refreshToken,
+          });
+        } catch (error) {
+          console.log('eeee' + this.state.token);
+        }
+        await AsyncStorage.storeData('token', this.props.token);
+        await AsyncStorage.storeData('refreshToken', this.props.refreshToken);
+        await this.props.clearBorrowAction();
+
+        if (await AsyncStorage.getItem('token')) {
+          this.getDataBorrowUser();
+          this.props.navigation.navigate('Home');
+        }
+      }
     }
+    if (prevState.token !== this.state.token) {
+      this.getDataBorrowUser();
+    }
+    //if not use refresh token uncomment this below
+
+    // if (this.props.errorToken === 'TokenExpiredError') {
+    //   await this.props.logoutUserAction();
+    //   // await this.props.clearBorrowAction();
+    //   await AsyncStorage.clear().then(response => {
+    //     Alert.alert('Session has Ended, Please Login ..');
+    //     // Alert.alert('Thank You..');
+    //     this.setState({isLoading: false});
+    //     this.props.navigation.navigate('Login');
+    //   });
+    //   // this.props.navigation.navigate('Login');
+    //   // return;
+    // }
     if (prevprops.role !== this.props.role) {
       this.getDataBorrowUser();
     }
@@ -632,6 +680,7 @@ const mapStateToProps = ({
     dataUser: reducerUser.data,
     error: reducerBook.error,
     token: reducerUser.token,
+    refreshToken: reducerUser.refreshToken,
     role: reducerUser.role,
     id_user: reducerUser.id_user,
     borrowTemp: reducerBorrow.borrow,
@@ -671,6 +720,9 @@ const mapDispatchToProps = dispatch => {
     },
     logoutUserAction: async () => {
       await dispatch(logoutUserActionCreator());
+    },
+    clearBorrowAction: async () => {
+      await dispatch(clearBorrowActionCreator());
     },
   };
 };
