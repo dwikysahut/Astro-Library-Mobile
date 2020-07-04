@@ -34,11 +34,11 @@ import {
   // FooterTab,
   Button,
   Icon,
-  // Text,
+  Text,
 } from 'native-base';
 
 import Filter from '../components/Filter';
-import {refreshTokenActionCreator} from '../redux/actions/UserAction.js';
+// import {refreshTokenActionCreator} from '../redux/actions/UserAction.js';
 
 import {
   getBooksByGenreActionCreator,
@@ -412,7 +412,7 @@ class BooksByGenre extends Component {
               <Container style={styles.spinnerStyle}>
                 <Spinner color="darkcyan" />
               </Container>
-            ) : (
+            ) : this.props.dataByGenre.length > 0 ? (
               <FlatList
                 style={styles.whiteBackground}
                 data={this.props.dataByGenre}
@@ -456,6 +456,10 @@ class BooksByGenre extends Component {
                 }
                 // onScroll={() => this.setState({showbookSlide: false})}
               />
+            ) : (
+              <Container>
+                <Text style={styles.noResult}>No Books In This Category</Text>
+              </Container>
             )}
             {/* )} */}
             {this.state.upButton ? (
@@ -530,6 +534,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  noResult: {paddingLeft: '24%', paddingTop: '50%'},
+
   backButton: {
     marginLeft: 0,
     width: 100,

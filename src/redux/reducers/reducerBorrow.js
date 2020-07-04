@@ -118,6 +118,7 @@ const dataBorrow = (prevState = initialValue, action) => {
         // errorToken: action.payload.response.data.data.message
       };
     case returnBookAction + fulfilled:
+      // eslint-disable-next-line no-shadow
       const newData = prevState.data.map(dataBorrow => {
         // eslint-disable-next-line eqeqeq
         if (dataBorrow.id == action.payload.data.data.id) {

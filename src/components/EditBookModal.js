@@ -86,8 +86,8 @@ class EditBookModal extends Component {
   // }
 
   componentDidUpdate = async prevProps => {
-    console.log(this.props.title);
-    console.log(this.props.data);
+    // console.log(this.props.title);
+    // console.log(this.props.data);
     if (prevProps.data !== this.props.data) {
       await this.setState({
         id: this.props.data.id,
@@ -202,9 +202,10 @@ class EditBookModal extends Component {
       // console.log(this.props)
       if (this.props.isLoading === false && this.props.isFulfilled === true) {
         this.handleHide();
-        // return this.props.refresh();
+        return this.props.refresh();
       }
       //   console.log({error});
+      // this.props.navigation.navigate('Book-List');
     }
   };
 
@@ -218,6 +219,11 @@ class EditBookModal extends Component {
       await this.props.getGenreAction(this.props.token);
     }
   };
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      this.props.navigation.navigate('Book-List');
+    }
+  }
 
   render() {
     const {image} = this.state;

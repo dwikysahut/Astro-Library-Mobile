@@ -220,6 +220,7 @@ const dataBook = (prevState = initialValue, action) => {
         isFulfilled: true,
         // dataObj:action.payload.data.data[0],
         data: newData,
+        dataByGenre: newData,
       };
 
     case deleteBookAction + pending:
@@ -248,6 +249,7 @@ const dataBook = (prevState = initialValue, action) => {
         isRejected: false,
         isFulfilled: true,
         data: deleteData,
+        dataByGenre: deleteData,
       };
 
     case getDetailBookAction + pending:

@@ -180,7 +180,7 @@ class AllBooks extends Component {
   };
   getData = async () => {
     console.log('sss ' + this.state.token);
-    const {page, limit, orderBy, sortBy, title} = this.state;
+    const {orderBy, sortBy, title} = this.state;
     const pageQuery = {
       page: 1,
       limit: 6,
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  noResult: {paddingLeft: 150, paddingTop: 200},
+  noResult: {paddingLeft: '34%', paddingTop: '50%'},
   title: {
     fontSize: 32,
   },

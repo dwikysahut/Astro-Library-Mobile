@@ -77,11 +77,11 @@ function CardDetailBook({
     // const id = data.id
 
     await deleteBookAction(token, data.id);
-    props.navigation.navigate('Books');
+    props.navigation.navigate('Book-List');
 
     // setSuccess(true)
     // setIsShow(true)
-    // return refresh()
+    return refresh();
   }
 
   return (

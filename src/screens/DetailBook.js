@@ -98,7 +98,7 @@ class DetailBook extends Component {
     let id = parseInt(this.props.route.params.id);
     const dataById = this.props.dataBook.filter(dataBook => dataBook.id === id);
 
-    const data = dataById[0];
+    const data = this.props.dataById[0];
     console.log(dataById);
     // console.log('sss'+this.props.dataById);
     if (this.props.errorToken === 'TokenExpiredError') {
