@@ -147,7 +147,7 @@ class DetailBook extends Component {
           ])}>
           {renderDataDetail}
         </ScrollView>
-        {this.state.role === '1' || this.state.role === 1 ? (
+        {(this.state.role === '1' || this.state.role === 1) && data ? (
           <EditBookModal
             id={this.props.route.params.id}
             token={this.props.route.params.token}
