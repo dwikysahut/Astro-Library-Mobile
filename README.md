@@ -95,7 +95,7 @@ REACT_APP_API=http://YOUR_IP_ADDRESS:8080
 </div>
 
 ## Release APK
-<a href="https://drive.google.com/file/d/1AbW5qoaXP89W4CwkIjtMzdul6MVrm7LB/view?usp=sharing">
+<a href="https://drive.google.com/file/d/1LPpD4cUStCSn6mvrFeej3T6uGJPhDgA-/view?usp=sharing">
   <img src="https://img.shields.io/badge/Download%20on%20the-Google%20Drive-blue.svg?style=popout&logo=google-drive"/>
 </a>
 
